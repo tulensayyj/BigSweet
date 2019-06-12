@@ -69,21 +69,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phone_edit_order_textView" />
 
+        <TextView
+            android:id="@+id/address_choose_edit_order_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:hint="@string/activity_edit_order_address_choose_hint"
+            android:textSize="14sp"
+            android:drawableRight="@drawable/ic_location_city_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/address_edit_order_textView"
+            app:layout_constraintTop_toTopOf="@+id/address_edit_order_textView">
+
+        </TextView>
+
         <EditText
             android:id="@+id/address_edit_order_editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="18dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
             android:background="@null"
             android:hint="@string/activity_edit_order_address_hint"
-            android:textSize="14dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginEnd="18dp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/address_edit_order_textView"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/address_edit_order_textView" />
+            app:layout_constraintStart_toEndOf="@id/address_edit_order_textView"
+            app:layout_constraintTop_toBottomOf="@+id/address_choose_edit_order_textView" />
 
 
     </android.support.constraint.ConstraintLayout>

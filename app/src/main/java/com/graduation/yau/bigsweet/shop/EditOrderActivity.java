@@ -1,5 +1,6 @@
 package com.graduation.yau.bigsweet.shop;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -11,16 +12,21 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.graduation.yau.bigsweet.R;
 import com.graduation.yau.bigsweet.base.BaseActivity;
+import com.graduation.yau.bigsweet.model.CityModel;
 import com.graduation.yau.bigsweet.model.Order;
 import com.graduation.yau.bigsweet.model.Product;
+import com.graduation.yau.bigsweet.model.ProvinceModel;
 import com.graduation.yau.bigsweet.model.Seller;
 import com.graduation.yau.bigsweet.model.User;
 import com.graduation.yau.bigsweet.person.OrderDetailActivity;
 import com.graduation.yau.bigsweet.util.ConvertUtil;
+import com.graduation.yau.bigsweet.util.HttpUtil;
+import com.graduation.yau.bigsweet.util.JsonUtil;
 import com.graduation.yau.bigsweet.util.StartActivityUtil;
 import com.graduation.yau.bigsweet.util.TextUtil;
 import com.graduation.yau.bigsweet.util.ToastUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -29,6 +35,9 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by YAULEISIM on 2019/4/30.
@@ -40,8 +49,11 @@ public class EditOrderActivity extends BaseActivity {
     private Seller mSeller;
     private EditText mConsigneeEditText, mPhoneEditText, mAddressEditText, mWordsEditText;
     private TextView mSubmitTextView, mPriceSumTextView, mShopNameTextView, mTitleTextView, mSumTextView, mPriceTextView, mAddTextView, mReduceTextView;
+    private TextView mChooseAddressTextView;
     private ImageView mPicImageView;
     private int num = 1;
+    private Context context = this;
+    PickLocationDialog mPickLocationDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,8 @@ public class EditOrderActivity extends BaseActivity {
         }
         loadContentLayout(R.layout.activity_edit_order);
         setTitleName(R.string.activity_edit_order_title);
+        mPickLocationDialog = new PickLocationDialog(this);
+        requestCitiesData();
     }
 
     @Override
@@ -61,6 +75,8 @@ public class EditOrderActivity extends BaseActivity {
         mPhoneEditText = findViewById(R.id.phone_edit_order_editText);
         mAddressEditText = findViewById(R.id.address_edit_order_editText);
         mWordsEditText = findViewById(R.id.words_edit_order_editText);
+
+        mChooseAddressTextView = findViewById(R.id.address_choose_edit_order_textView);
 
         mSubmitTextView = findViewById(R.id.submit_edit_order_textView);
         mPriceSumTextView = findViewById(R.id.price_sum_edit_order_textView);
@@ -108,6 +124,7 @@ public class EditOrderActivity extends BaseActivity {
         mAddTextView.setOnClickListener(this);
         mReduceTextView.setOnClickListener(this);
         mSubmitTextView.setOnClickListener(this);
+        mChooseAddressTextView.setOnClickListener(this);
     }
 
     @Override
@@ -129,22 +146,56 @@ public class EditOrderActivity extends BaseActivity {
             case R.id.submit_edit_order_textView:
                 doSubmit();
                 break;
+            case R.id.address_choose_edit_order_textView:
+                showLocationDialog();
+                break;
             default:
                 break;
         }
     }
 
+    private void requestCitiesData() {
+        HttpUtil.sendOkHttpRequest("http://192.168.2.101:80/cities.json", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.show(context, R.string.base_note_network_wrong, Toast.LENGTH_SHORT, false);
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                List<ProvinceModel> list = JsonUtil.parseDataToLocation(response.body().string());
+                mPickLocationDialog.initData(list);
+            }
+        });
+    }
+
+    private void showLocationDialog() {
+        if (mPickLocationDialog.isGetValue) {
+            mPickLocationDialog.makeDialog(new PickLocationDialog.AddressPickedListener() {
+                @Override
+                public void onAddressPicked(ProvinceModel province, CityModel city, String district) {
+                    mChooseAddressTextView.setText(province.getName() + "省" + city.getName() + "市" + district);
+                }
+            }).show();
+        } else {
+            requestCitiesData();
+        }
+    }
+
+
     private void doSubmit() {
         String consignee = mConsigneeEditText.getText().toString();
         String phone = mPhoneEditText.getText().toString();
-        String address = mAddressEditText.getText().toString();
-        if (TextUtil.isEmpty(consignee) || TextUtil.isEmpty(phone) || TextUtil.isEmpty(address)) {
+        String addressSimple = mChooseAddressTextView.getText().toString();
+        String addressDetail = mAddressEditText.getText().toString();
+        if (TextUtil.isEmpty(consignee) || TextUtil.isEmpty(phone) || TextUtil.isEmpty(addressSimple) || TextUtil.isEmpty(addressDetail)) {
             ToastUtil.show(this, R.string.activity_edit_order_null, Toast.LENGTH_SHORT, false);
             return;
         }
 
         final Order order = new Order();
-        order.setAddress(address);
+        order.setAddress(addressSimple + "|" + addressDetail);
         order.setConsignee(consignee);
         order.setPhone(phone);
         order.setProductId(mProduct.getObjectId());

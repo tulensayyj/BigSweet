@@ -30,10 +30,18 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void loadContentLayout(int resId) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (inflater == null) {
-            return;
-        }
+
+        //LayoutInflater 三种实力化方式，但是本质上都是下面这种
+
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        if (inflater == null) {
+//            return;
+//        }
+
+        //不过这里可以直接调用Activity中有的 getLayoutInflater() 方法
+
+        LayoutInflater inflater = getLayoutInflater();
+
         mContentView = inflater.inflate(resId, null);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);

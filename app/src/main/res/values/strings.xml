@@ -212,7 +212,8 @@
     <string name="activity_edit_order_consignee">收货人：</string>
     <string name="activity_edit_order_words">留言</string>
     <string name="activity_edit_order_phone_hint">请填写联系方式</string>
-    <string name="activity_edit_order_address_hint">请填写收货地址</string>
+    <string name="activity_edit_order_address_choose_hint">请选择所在城市</string>
+    <string name="activity_edit_order_address_hint">请填写详细收货地址</string>
     <string name="activity_edit_order_consignee_hint">请填写收货人</string>
     <string name="activity_edit_order_words_hint">请填写留言</string>
     <string name="activity_edit_order_error">不能再少了！</string>
@@ -237,4 +238,5 @@
     <string name="activity_release_dialog_title">发布中</string>
     <string name="activity_release_single_dialog_title">商品分类</string>
 
+    <string name="base_note_network_wrong">请求失败，请检查网络</string>
 </resources>
