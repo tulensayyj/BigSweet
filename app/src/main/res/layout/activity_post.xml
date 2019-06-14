@@ -39,8 +39,8 @@
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/back_post_imageView" />
 
-    <LinearLayout
-        android:id="@+id/add_picture_post_LinearLayout"
+    <FrameLayout
+        android:id="@+id/add_picture_post_FrameLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginEnd="20dp"
@@ -51,35 +51,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/input_post_editText">
 
-        <ImageView
-            android:id="@+id/add_picture_post_imageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_add_picture" />
+        <com.graduation.yau.bigsweet.person.NoScrollGridView
+            android:id="@+id/add_picture_post_GridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:verticalSpacing="6dp" />
 
-        <ImageView
-            android:id="@+id/one_picture_post_imageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_add_picture"
-            android:visibility="invisible" />
-
-        <ImageView
-            android:id="@+id/two_picture_post_imageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_add_picture"
-            android:visibility="invisible" />
-
-    </LinearLayout>
+    </FrameLayout>
 
 
     <android.support.constraint.ConstraintLayout
@@ -89,7 +69,7 @@
         android:layout_marginTop="50dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toTopOf="@id/public_post_constraintLayout"
-        app:layout_constraintTop_toBottomOf="@id/add_picture_post_LinearLayout">
+        app:layout_constraintTop_toBottomOf="@id/add_picture_post_FrameLayout">
 
         <View
             android:id="@+id/separator_one_post_view"

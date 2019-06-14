@@ -32,9 +32,6 @@ public class JsonUtil {
                 return null;
             }
             Log.d("JsonUtil", "parseDataToLocation: " + data);
-//            Gson gson = new Gson();
-//            list = gson.fromJson(data, new TypeToken<List<ProvinceModel>>() {
-//            }.getType());
 
             JsonParser jsonParser = new JsonParser();
             JsonArray jsonArray = jsonParser.parse(data.trim()).getAsJsonArray();
