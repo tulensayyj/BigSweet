@@ -155,7 +155,7 @@ public class EditOrderActivity extends BaseActivity {
     }
 
     private void requestCitiesData() {
-        HttpUtil.sendOkHttpRequest("http://192.168.2.101:80/cities.json", new Callback() {
+        HttpUtil.sendOkHttpRequest("http://192.168.31.58:80/cities.json", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.show(context, R.string.base_note_network_wrong, Toast.LENGTH_SHORT, false);
@@ -164,7 +164,7 @@ public class EditOrderActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                List<ProvinceModel> list = JsonUtil.parseDataToLocation(response.body().string());
+                List<ProvinceModel> list = JsonUtil.parseDataToList(response.body().string(), ProvinceModel.class);
                 mPickLocationDialog.initData(list);
             }
         });

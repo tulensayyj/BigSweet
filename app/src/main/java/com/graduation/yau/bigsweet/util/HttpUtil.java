@@ -1,5 +1,9 @@
 package com.graduation.yau.bigsweet.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,4 +69,16 @@ public class HttpUtil {
                     .build();
             client.newCall(request).enqueue(callback);
         }
+
+    public static boolean isNetWorkUsable(Context context){
+        boolean isNetUsable = false;
+        ConnectivityManager manager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            NetworkCapabilities networkCapabilities =
+                    manager.getNetworkCapabilities(manager.getActiveNetwork());
+            isNetUsable = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+        }
+        return isNetUsable;
+    }
 }

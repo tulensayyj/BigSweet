@@ -51,8 +51,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new FollowFragment());
         fragments.add(new RecommendFragment());
+        fragments.add(new BeautyFragment());
 
-        mHomeShiftViewPagerAdapter = new HomeShiftViewPagerAdapter(getChildFragmentManager(), fragments, new String[]{"关注", "推荐"});
+        mHomeShiftViewPagerAdapter = new HomeShiftViewPagerAdapter(getChildFragmentManager(), fragments, new String[]{"关注", "推荐","美图"});
         mHomeShiftViewPager.setAdapter(mHomeShiftViewPagerAdapter);
 
         mHomeTabLayout.setupWithViewPager(mHomeShiftViewPager);

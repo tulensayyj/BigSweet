@@ -55,8 +55,8 @@ public class RecommendFragment extends Fragment {
         initData();
         mPostRecommendAdapter = new PostAdapter(getContext(), mPostList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mPostRecommendRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        mPostRecommendRecyclerView.setLayoutManager(layoutManager);
         mPostRecommendRecyclerView.setAdapter(mPostRecommendAdapter);
     }
 

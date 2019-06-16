@@ -1,13 +1,16 @@
 package com.graduation.yau.bigsweet.util;
 
+import android.util.JsonReader;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.graduation.yau.bigsweet.model.ProvinceModel;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,9 +27,8 @@ import javax.security.auth.callback.Callback;
 
 public class JsonUtil {
 
-    public static List<ProvinceModel> parseDataToLocation(String data) {
-
-        List<ProvinceModel> list = new ArrayList<>();
+    public static <T> List<T> parseDataToList(String data, Class<T> tClass) {
+        List<T> list = new ArrayList<>();
         try {
             if (data.isEmpty()) {
                 return null;
@@ -38,8 +40,8 @@ public class JsonUtil {
             Gson gson = new Gson();
 
             for (JsonElement bean : jsonArray) {
-                ProvinceModel provinceModel = gson.fromJson(bean, ProvinceModel.class);
-                list.add(provinceModel);
+                T t = gson.fromJson(bean, tClass);
+                list.add(t);
             }
 
             return list;
@@ -47,6 +49,20 @@ public class JsonUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String getValue(String json, String key) {
+        try {
+//            JsonParser jsonParser = new JsonParser();
+//            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+//            return jsonObject.get(key).getAsString();
+
+            JSONObject jsonObject = new JSONObject(json);
+            return jsonObject.getString(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static <T> T formJsonToArray(String json, Type t) {
