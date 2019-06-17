@@ -6,11 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.graduation.yau.bigsweet.R;
+import com.graduation.yau.bigsweet.base.OnClickDragListener;
 import com.graduation.yau.bigsweet.base.OnLoadMoreScrollListener;
 import com.graduation.yau.bigsweet.model.BeautyPhoto;
 import com.graduation.yau.bigsweet.util.HttpUtil;
@@ -62,6 +64,19 @@ public class BeautyFragment extends Fragment {
         });
         mBeautyPhotosView.setAdapter(mAdapter);
         mAdapter.initData();
+        setAllowDragItem(true);
     }
 
+    private void setAllowDragItem(boolean isLongPressDrag) {
+        if (mBeautyPhotosView == null || mAdapter == null) {
+            return;
+        }
+
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new OnClickDragListener<BeautyPhoto>(mAdapter.getDataList())
+                        .setLongPressDrag(isLongPressDrag));
+
+        itemTouchHelper.attachToRecyclerView(mBeautyPhotosView);
+    }
 }

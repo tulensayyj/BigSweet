@@ -111,47 +111,48 @@ public class BeautyPhotoAdapter extends RecyclerView.Adapter<BeautyPhotoAdapter.
                 });
     }
 
-    private void getData2() {
-        HttpUtil.sendOkHttpRequest(
-                "http://gank.io/api/data/福利/" + PRE_SIZE + "/" + mStartPage,
-                new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String listValue = JsonUtil.getValue(response.body().string(), "results");
-                        List<BeautyPhoto> list = JsonUtil.parseDataToList(listValue, BeautyPhoto.class);
-                        mBeautyPhotos.addAll(list);
-                        mStartPage += 1;
-                        mHandler.sendEmptyMessage(MSG_LOAD_FINISH);
-                    }
-                });
-    }
+//    private void getData2() {
+//        HttpUtil.sendOkHttpRequest(
+//                "http://gank.io/api/data/福利/" + PRE_SIZE + "/" + mStartPage,
+//                new Callback() {
+//                    @Override
+//                    public void onFailure(Call call, IOException e) {
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Call call, Response response) throws IOException {
+//                        String listValue = JsonUtil.getValue(response.body().string(), "results");
+//                        List<BeautyPhoto> list = JsonUtil.parseDataToList(listValue, BeautyPhoto.class);
+//                        mBeautyPhotos.addAll(list);
+//                        mStartPage += 1;
+//                        mHandler.sendEmptyMessage(MSG_LOAD_FINISH);
+//                    }
+//                });
+//    }
 
     public void loadMoreData() {
         getData();
-//        getData2();
     }
 
     public void initData() {
         getData();
-//        getData2();
     }
 
     public List<BeautyPhoto> getDataList() {
         return mBeautyPhotos;
     }
 
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_FINISH:
-                    mAdapter.notifyDataSetChanged();
-                    break;
-            }
-        }
-    };
+//    private Handler mHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case MSG_LOAD_FINISH:
+//                    mAdapter.notifyDataSetChanged();
+//                    break;
+//            }
+//        }
+//    };
 
+    public boolean isLoadDataFinish() {
+        return getDataList() != null && getDataList().size() > 0;
+    }
 }
