@@ -91,7 +91,7 @@ public class RequestBuilder {
     private RequestBuilder(HostType hostType) {
 
         //缓存
-        File cacheFile = new File(BaseApplication.getAppContext().getCacheDir(), "cache");
+        File cacheFile = new File(BaseUtil.getApplicationContext().getCacheDir(), "cache");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
         //增加头部信息
         Interceptor headerInterceptor = new Interceptor() {
@@ -157,7 +157,7 @@ public class RequestBuilder {
      */
     @NonNull
     public static String getCacheControl() {
-        return HttpUtil.isNetWorkUsable(BaseApplication.getAppContext()) ? CACHE_CONTROL_AGE : CACHE_CONTROL_CACHE;
+        return HttpUtil.isNetWorkUsable(BaseUtil.getApplicationContext()) ? CACHE_CONTROL_AGE : CACHE_CONTROL_CACHE;
     }
 
     /**
@@ -169,13 +169,13 @@ public class RequestBuilder {
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
             String cacheControl = request.cacheControl().toString();
-            if (!HttpUtil.isNetWorkUsable(BaseApplication.getAppContext())) {
+            if (!HttpUtil.isNetWorkUsable(BaseUtil.getApplicationContext())) {
                 request = request.newBuilder()
                         .cacheControl(TextUtils.isEmpty(cacheControl) ? CacheControl.FORCE_NETWORK : CacheControl.FORCE_CACHE)
                         .build();
             }
             Response originalResponse = chain.proceed(request);
-            if (HttpUtil.isNetWorkUsable(BaseApplication.getAppContext())) {
+            if (HttpUtil.isNetWorkUsable(BaseUtil.getApplicationContext())) {
                 //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
 
                 return originalResponse.newBuilder()

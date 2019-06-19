@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import java.util.Collections;
 import java.util.List;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -40,6 +41,7 @@ public class OnClickDragListener<T> extends ItemTouchHelper.Callback {
             return false;
         }
         recyclerView.getAdapter().notifyItemMoved(viewHolder.getAdapterPosition(), viewHolder1.getAdapterPosition());
+        Collections.swap(mDataList, viewHolder.getAdapterPosition(), viewHolder1.getAdapterPosition());
         return true;
     }
 

@@ -1,9 +1,6 @@
 package com.graduation.yau.bigsweet.home;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,13 +12,9 @@ import android.widget.ImageView;
 import com.graduation.yau.bigsweet.R;
 import com.graduation.yau.bigsweet.model.BeautyPhoto;
 import com.graduation.yau.bigsweet.model.BeautyPhotoData;
-import com.graduation.yau.bigsweet.util.HttpUtil;
 import com.graduation.yau.bigsweet.util.ImageLoader;
-import com.graduation.yau.bigsweet.util.JsonUtil;
 import com.graduation.yau.bigsweet.util.RequestBuilder;
-import com.graduation.yau.bigsweet.util.RequestService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * Created by yyj on 2019/6/16.
@@ -45,7 +35,7 @@ public class BeautyPhotoAdapter extends RecyclerView.Adapter<BeautyPhotoAdapter.
     private List<BeautyPhoto> mBeautyPhotos;
     private Context mContext;
     private BeautyPhotoAdapter mAdapter;
-
+    private OnLoadFinishListener mOnLoadFinishListener;
 
     private static int PRE_SIZE = 20;
     private int mStartPage = 0;
@@ -102,11 +92,18 @@ public class BeautyPhotoAdapter extends RecyclerView.Adapter<BeautyPhotoAdapter.
                         mBeautyPhotos.addAll(beautyPhotos);
                         mStartPage += 1;
                         notifyDataSetChanged();
+                        if(mOnLoadFinishListener!=null){
+                            mOnLoadFinishListener.onLoadSucceed();
+                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "accept: 获取图片数据失败", throwable);
+                        if(mOnLoadFinishListener!=null){
+                            mOnLoadFinishListener.onLoadFailed();
+                        }
                     }
                 });
     }
@@ -135,12 +132,20 @@ public class BeautyPhotoAdapter extends RecyclerView.Adapter<BeautyPhotoAdapter.
     }
 
     public void initData() {
+        mStartPage=0;
+        getDataList().clear();
         getData();
     }
 
     public List<BeautyPhoto> getDataList() {
         return mBeautyPhotos;
     }
+
+
+    public void setOnLoadFinishListener(OnLoadFinishListener onLoadFinishListener) {
+        this.mOnLoadFinishListener = onLoadFinishListener;
+    }
+
 
 //    private Handler mHandler = new Handler() {
 //        public void handleMessage(Message msg) {
@@ -152,7 +157,10 @@ public class BeautyPhotoAdapter extends RecyclerView.Adapter<BeautyPhotoAdapter.
 //        }
 //    };
 
-    public boolean isLoadDataFinish() {
-        return getDataList() != null && getDataList().size() > 0;
+
+
+    public interface OnLoadFinishListener{
+        public void onLoadSucceed();
+        public void onLoadFailed();
     }
 }

@@ -30,14 +30,4 @@ public class BaseApplication extends Application {
         super.onTerminate();
     }
 
-    /**
-     * 分包
-     *
-     * @param base
-     */
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-    }
-
 }
